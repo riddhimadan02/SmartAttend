@@ -1,0 +1,10 @@
+.venv/
+__pycache__/
+*.pyc
+venv/
+data/faces/
+data/attendance.db
+data/trainer.yml
+.env
+.vscode/
+desktop.ini

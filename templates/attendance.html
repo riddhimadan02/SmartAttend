@@ -1,0 +1,68 @@
+
+{% extends 'base.html' %}
+{% block heading %}Attendance reports{% endblock %}
+
+{% block content %}
+<section class="panel">
+
+    <div class="panel-title">
+        <div>
+            <h2>Daily attendance</h2>
+            <form class="inline">
+                <input type="date" name="date" value="{{selected}}">
+                <button class="secondary">View</button>
+            </form>
+        </div>
+        <a class="button" href="/attendance/export">Download CSV</a>
+    </div>
+
+    {% if rows %}
+
+    <input
+        type="text"
+        id="attendanceSearch"
+        placeholder="Search by student name, roll number or course..."
+        onkeyup="searchAttendance()"
+    >
+
+    <table id="attendanceTable">
+        <tr>
+            <th>Roll no.</th>
+            <th>Name</th>
+            <th>Course</th>
+            <th>Marked at</th>
+            <th>Match distance</th>
+        </tr>
+
+        {% for row in rows %}
+        <tr>
+            <td>{{row.roll_no}}</td>
+            <td>{{row.name}}</td>
+            <td>{{row.course}}</td>
+            <td>{{row.marked_at}}</td>
+            <td>{{'%.1f'|format(row.confidence)}}</td>
+        </tr>
+        {% endfor %}
+    </table>
+
+    {% else %}
+    <div class="empty">No attendance marked for {{selected}}.</div>
+    {% endif %}
+
+</section>
+
+<script>
+function searchAttendance() {
+    let input = document.getElementById("attendanceSearch");
+    let filter = input.value.toLowerCase();
+    let table = document.getElementById("attendanceTable");
+    let rows = table.getElementsByTagName("tr");
+
+    for (let i = 1; i < rows.length; i++) {
+        let text = rows[i].textContent.toLowerCase();
+        rows[i].style.display = text.includes(filter) ? "" : "none";
+    }
+}
+</script>
+
+{% endblock %}
